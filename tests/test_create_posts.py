@@ -1,8 +1,4 @@
-from utils.client_api import APIClient
-
-client = APIClient()
-
-def test_create_post():
+def test_create_post(client):
     exampleJSON = {
         "title": "Test Title",
         "body": "Test Body",
@@ -14,7 +10,7 @@ def test_create_post():
     assert response.status_code == 201
     assert data["title"] == "Test Title"
 
-def test_create_post_missing_fields():
+def test_create_post_missing_fields(client):
     exampleJSON = {
         "title": "Missing body"
     }

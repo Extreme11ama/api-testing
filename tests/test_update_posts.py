@@ -1,8 +1,4 @@
-from utils.client_api import APIClient
-
-client = APIClient()
-
-def test_update_post():
+def test_update_post(client):
     updated = {
         "title": "Updated Title",
         "body": "Updated Body",
