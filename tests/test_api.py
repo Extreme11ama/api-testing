@@ -1,4 +1,5 @@
 from utils.client_api import APIClient
+import pytest
 
 client = APIClient()
 
@@ -46,6 +47,43 @@ def test_create_post_missing_fields():
         "title": "Missing body"
     }
     response = client.createPost(exampleJSON)
-    
+
     assert response.status_code in [200, 201]
+
+def test_update_post():
+    updated = {
+        "title": "Updated Title",
+        "body": "Updated Body",
+        "userId": 1
+    }
+    response = client.updatePost(1, updated)
+    data = response.json()
+
+    assert response.status_code == 200
+    assert data["title"] == "Updated Title"
+
+def test_delete_post():
+    response = client.deletePost(1)
+
+    assert response.status_code == 200
+
+@pytest.mark.parametrize("postID", [1, 5, 10])
+def test_multiple_posts(postID):
+    response = client.getPost(postID)
+
+    assert response.status_code == 200
+
+def test_response_time():
+    response = client.getAllPosts()
+
+    assert response.elapsed.total_seconds() < 2
+
+def test_post_schema():
+    response = client.getPost(1)
+    data = response.json()
+
+    expected_fields = ["userId", "id", "title", "body"]
+
+    for field in expected_fields:
+        assert field in data
 
